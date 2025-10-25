@@ -737,17 +737,19 @@
                                 <div class="reference-box">
                                     <h4>PVC Conduit Sizes:</h4>
                                     <ul>
-                                        <li>Pipes: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm, 200mm</li>
-                                        <li>Couplings: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
-                                        <li>Elbows: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
-                                        <li>Locknuts & Bushings: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
+                                        <li>Pipes: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 75 mm, 90 mm, 100 mm, 110 mm, 150 mm, 200 mm</li>
+                                        <li>Couplings: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 75 mm, 90 mm, 100 mm, 110 mm, 150 mm</li>
+                                        <li>Elbows: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 75 mm, 90 mm, 100 mm, 110 mm, 150 mm</li>
+                                        <li>Connectors: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 75 mm, 90 mm, 100 mm, 110 mm, 150 mm</li>
+                                        <li>Locknuts & Bushings: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 75 mm, 90 mm, 100 mm, 110 mm, 150 mm</li>
                                     </ul>
                                     <h4>EMT Conduit Sizes:</h4>
                                     <ul>
-                                        <li>Pipes: 15mm, 20mm, 25mm, 40mm, 50mm</li>
-                                        <li>Couplings: 15mm, 20mm, 25mm, 40mm, 50mm</li>
-                                        <li>Connectors: 15mm, 20mm, 25mm, 40mm, 50mm</li>
-                                        <li>Locknuts & Bushings: 15mm, 20mm, 25mm, 40mm, 50mm</li>
+                                        <li>Pipes: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 78 mm, 103 mm</li>
+                                        <li>Couplings: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 78 mm, 103 mm</li>
+                                        <li>Elbows: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 78 mm, 103 mm</li>
+                                        <li>Connectors: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 78 mm, 103 mm</li>
+                                        <li>Locknuts & Bushings: 16 mm, 20 mm, 25 mm, 32 mm, 40 mm, 50 mm, 63 mm, 78 mm, 103 mm</li>
                                     </ul>
                                 </div>
                             </div>
@@ -845,91 +847,136 @@
         const USD_TO_EUR = 0.85;
         const USD_TO_JPY = 110;
 
-        // Material price database (USD and PHP, 2025 averages)
+        // Updated Material price database (USD and PHP, 2025 averages)
         const materials = {
             PVC: {
                 pipes: {
+                    '16mm': { cost_per_foot: 1.00, cost_per_meter: 3.28, labor_hours_per_100ft: 1.8 },
                     '20mm': { cost_per_foot: 1.20, cost_per_meter: 3.94, labor_hours_per_100ft: 2.0 },
                     '25mm': { cost_per_foot: 1.50, cost_per_meter: 4.92, labor_hours_per_100ft: 2.2 },
+                    '32mm': { cost_per_foot: 1.80, cost_per_meter: 5.90, labor_hours_per_100ft: 2.4 },
                     '40mm': { cost_per_foot: 2.00, cost_per_meter: 6.56, labor_hours_per_100ft: 2.5 },
                     '50mm': { cost_per_foot: 2.50, cost_per_meter: 8.20, labor_hours_per_100ft: 2.8 },
+                    '63mm': { cost_per_foot: 3.00, cost_per_meter: 9.84, labor_hours_per_100ft: 3.0 },
                     '75mm': { cost_per_foot: 3.50, cost_per_meter: 11.48, labor_hours_per_100ft: 3.2 },
                     '90mm': { cost_per_foot: 4.50, cost_per_meter: 14.76, labor_hours_per_100ft: 3.5 },
                     '100mm': { cost_per_foot: 5.00, cost_per_meter: 16.40, labor_hours_per_100ft: 3.8 },
+                    '110mm': { cost_per_foot: 5.50, cost_per_meter: 18.04, labor_hours_per_100ft: 4.0 },
+                    '150mm': { cost_per_foot: 6.50, cost_per_meter: 21.32, labor_hours_per_100ft: 4.5 },
                     '200mm': { cost_per_foot: 8.00, cost_per_meter: 26.24, labor_hours_per_100ft: 5.0 }
                 },
                 couplings: {
+                    '16mm': { cost: 0.60, labor_hours: 0.07 },
                     '20mm': { cost: 0.80, labor_hours: 0.08 },
                     '25mm': { cost: 1.00, labor_hours: 0.08 },
+                    '32mm': { cost: 1.10, labor_hours: 0.09 },
                     '40mm': { cost: 1.20, labor_hours: 0.09 },
                     '50mm': { cost: 1.50, labor_hours: 0.09 },
+                    '63mm': { cost: 1.80, labor_hours: 0.10 },
                     '75mm': { cost: 2.00, labor_hours: 0.10 },
                     '90mm': { cost: 2.50, labor_hours: 0.10 },
-                    '100mm': { cost: 3.00, labor_hours: 0.11 }
+                    '100mm': { cost: 3.00, labor_hours: 0.11 },
+                    '110mm': { cost: 3.30, labor_hours: 0.11 },
+                    '150mm': { cost: 4.50, labor_hours: 0.12 }
                 },
                 elbows: {
+                    '16mm': { cost: 1.20, labor_hours: 0.09 },
                     '20mm': { cost: 1.50, labor_hours: 0.10 },
                     '25mm': { cost: 1.80, labor_hours: 0.10 },
+                    '32mm': { cost: 2.00, labor_hours: 0.11 },
                     '40mm': { cost: 2.20, labor_hours: 0.11 },
                     '50mm': { cost: 2.50, labor_hours: 0.11 },
+                    '63mm': { cost: 3.00, labor_hours: 0.12 },
                     '75mm': { cost: 3.50, labor_hours: 0.12 },
                     '90mm': { cost: 4.50, labor_hours: 0.12 },
-                    '100mm': { cost: 5.00, labor_hours: 0.13 }
+                    '100mm': { cost: 5.00, labor_hours: 0.13 },
+                    '110mm': { cost: 5.50, labor_hours: 0.13 },
+                    '150mm': { cost: 7.00, labor_hours: 0.14 }
                 },
                 connectors: {
+                    '16mm': { cost: 1.00, labor_hours: 0.08 },
                     '20mm': { cost: 1.20, labor_hours: 0.09 },
                     '25mm': { cost: 1.40, labor_hours: 0.09 },
+                    '32mm': { cost: 1.50, labor_hours: 0.10 },
                     '40mm': { cost: 1.60, labor_hours: 0.10 },
                     '50mm': { cost: 1.80, labor_hours: 0.10 },
+                    '63mm': { cost: 2.00, labor_hours: 0.11 },
                     '75mm': { cost: 2.20, labor_hours: 0.11 },
                     '90mm': { cost: 2.60, labor_hours: 0.11 },
-                    '100mm': { cost: 3.00, labor_hours: 0.12 }
+                    '100mm': { cost: 3.00, labor_hours: 0.12 },
+                    '110mm': { cost: 3.30, labor_hours: 0.12 },
+                    '150mm': { cost: 4.00, labor_hours: 0.13 }
                 },
                 locknuts: {
+                    '16mm': { cost: 0.40, labor_hours: 0.05 },
                     '20mm': { cost: 0.50, labor_hours: 0.05 },
                     '25mm': { cost: 0.60, labor_hours: 0.05 },
+                    '32mm': { cost: 0.65, labor_hours: 0.06 },
                     '40mm': { cost: 0.70, labor_hours: 0.06 },
                     '50mm': { cost: 0.80, labor_hours: 0.06 },
+                    '63mm': { cost: 0.90, labor_hours: 0.07 },
                     '75mm': { cost: 1.00, labor_hours: 0.07 },
                     '90mm': { cost: 1.20, labor_hours: 0.07 },
-                    '100mm': { cost: 1.50, labor_hours: 0.08 }
+                    '100mm': { cost: 1.50, labor_hours: 0.08 },
+                    '110mm': { cost: 1.65, labor_hours: 0.08 },
+                    '150mm': { cost: 2.00, labor_hours: 0.09 }
                 }
             },
             EMT: {
                 pipes: {
-                    '15mm': { cost_per_foot: 1.80, cost_per_meter: 5.90, labor_hours_per_100ft: 2.2 },
-                    '20mm': { cost_per_foot: 2.20, cost_per_meter: 7.22, labor_hours_per_100ft: 2.4 },
-                    '25mm': { cost_per_foot: 2.80, cost_per_meter: 9.18, labor_hours_per_100ft: 2.6 },
+                    '16mm': { cost_per_foot: 1.60, cost_per_meter: 5.25, labor_hours_per_100ft: 2.0 },
+                    '20mm': { cost_per_foot: 1.80, cost_per_meter: 5.90, labor_hours_per_100ft: 2.2 },
+                    '25mm': { cost_per_foot: 2.20, cost_per_meter: 7.22, labor_hours_per_100ft: 2.4 },
+                    '32mm': { cost_per_foot: 3.00, cost_per_meter: 9.84, labor_hours_per_100ft: 2.6 },
                     '40mm': { cost_per_foot: 3.75, cost_per_meter: 12.30, labor_hours_per_100ft: 2.8 },
-                    '50mm': { cost_per_foot: 4.50, cost_per_meter: 14.76, labor_hours_per_100ft: 3.0 }
+                    '50mm': { cost_per_foot: 4.50, cost_per_meter: 14.76, labor_hours_per_100ft: 3.0 },
+                    '63mm': { cost_per_foot: 5.50, cost_per_meter: 18.04, labor_hours_per_100ft: 3.2 },
+                    '78mm': { cost_per_foot: 6.50, cost_per_meter: 21.32, labor_hours_per_100ft: 3.5 },
+                    '103mm': { cost_per_foot: 8.00, cost_per_meter: 26.24, labor_hours_per_100ft: 4.0 }
                 },
                 couplings: {
-                    '15mm': { cost: 1.20, labor_hours: 0.09 },
-                    '20mm': { cost: 1.40, labor_hours: 0.09 },
-                    '25mm': { cost: 1.60, labor_hours: 0.10 },
+                    '16mm': { cost: 1.00, labor_hours: 0.08 },
+                    '20mm': { cost: 1.20, labor_hours: 0.09 },
+                    '25mm': { cost: 1.40, labor_hours: 0.10 },
+                    '32mm': { cost: 1.50, labor_hours: 0.10 },
                     '40mm': { cost: 1.80, labor_hours: 0.10 },
-                    '50mm': { cost: 2.00, labor_hours: 0.11 }
+                    '50mm': { cost: 2.00, labor_hours: 0.11 },
+                    '63mm': { cost: 2.50, labor_hours: 0.12 },
+                    '78mm': { cost: 3.00, labor_hours: 0.12 },
+                    '103mm': { cost: 3.50, labor_hours: 0.13 }
                 },
                 elbows: {
-                    '15mm': { cost: 1.50, labor_hours: 0.10 },
-                    '20mm': { cost: 1.70, labor_hours: 0.10 },
-                    '25mm': { cost: 1.90, labor_hours: 0.11 },
+                    '16mm': { cost: 1.30, labor_hours: 0.09 },
+                    '20mm': { cost: 1.50, labor_hours: 0.10 },
+                    '25mm': { cost: 1.70, labor_hours: 0.11 },
+                    '32mm': { cost: 1.90, labor_hours: 0.11 },
                     '40mm': { cost: 2.10, labor_hours: 0.11 },
-                    '50mm': { cost: 2.30, labor_hours: 0.12 }
+                    '50mm': { cost: 2.30, labor_hours: 0.12 },
+                    '63mm': { cost: 2.80, labor_hours: 0.13 },
+                    '78mm': { cost: 3.50, labor_hours: 0.14 },
+                    '103mm': { cost: 4.50, labor_hours: 0.15 }
                 },
                 connectors: {
-                    '15mm': { cost: 1.50, labor_hours: 0.10 },
-                    '20mm': { cost: 1.70, labor_hours: 0.10 },
-                    '25mm': { cost: 1.90, labor_hours: 0.11 },
+                    '16mm': { cost: 1.30, labor_hours: 0.09 },
+                    '20mm': { cost: 1.50, labor_hours: 0.10 },
+                    '25mm': { cost: 1.70, labor_hours: 0.11 },
+                    '32mm': { cost: 1.90, labor_hours: 0.11 },
                     '40mm': { cost: 2.10, labor_hours: 0.11 },
-                    '50mm': { cost: 2.30, labor_hours: 0.12 }
+                    '50mm': { cost: 2.30, labor_hours: 0.12 },
+                    '63mm': { cost: 2.80, labor_hours: 0.13 },
+                    '78mm': { cost: 3.50, labor_hours: 0.14 },
+                    '103mm': { cost: 4.50, labor_hours: 0.15 }
                 },
                 locknuts: {
-                    '15mm': { cost: 0.60, labor_hours: 0.06 },
-                    '20mm': { cost: 0.70, labor_hours: 0.06 },
-                    '25mm': { cost: 0.80, labor_hours: 0.07 },
+                    '16mm': { cost: 0.50, labor_hours: 0.05 },
+                    '20mm': { cost: 0.60, labor_hours: 0.06 },
+                    '25mm': { cost: 0.70, labor_hours: 0.07 },
+                    '32mm': { cost: 0.80, labor_hours: 0.07 },
                     '40mm': { cost: 0.90, labor_hours: 0.07 },
-                    '50mm': { cost: 1.00, labor_hours: 0.08 }
+                    '50mm': { cost: 1.00, labor_hours: 0.08 },
+                    '63mm': { cost: 1.20, labor_hours: 0.09 },
+                    '78mm': { cost: 1.50, labor_hours: 0.10 },
+                    '103mm': { cost: 2.00, labor_hours: 0.11 }
                 }
             }
         };
@@ -983,6 +1030,7 @@
                     this.setAttribute('aria-checked', 'true');
                     currentUnitSystem = newUnit;
                     updateUnitLabels();
+                    updateConduitType(); // Update size labels when unit changes
                     updateConduitCosts();
                 });
                 
@@ -1183,6 +1231,37 @@
 
         function updateConduitType() {
             const conduitType = document.getElementById('conduitType').value;
+            const isImperial = currentUnitSystem === 'imperial';
+            
+            // Map metric sizes to imperial trade sizes for display
+            const sizeLabels = {
+                PVC: {
+                    '16mm': '1/2"',
+                    '20mm': '3/4"',
+                    '25mm': '1"',
+                    '32mm': '1-1/4"',
+                    '40mm': '1-1/2"',
+                    '50mm': '2"',
+                    '63mm': '2-1/2"',
+                    '75mm': '3"',
+                    '90mm': '3-1/2"',
+                    '100mm': '4"',
+                    '110mm': '4-1/2"',
+                    '150mm': '6"',
+                    '200mm': '8"'
+                },
+                EMT: {
+                    '16mm': '1/2"',
+                    '20mm': '3/4"',
+                    '25mm': '1"',
+                    '32mm': '1-1/4"',
+                    '40mm': '1-1/2"',
+                    '50mm': '2"',
+                    '63mm': '2-1/2"',
+                    '78mm': '3"',
+                    '103mm': '4"'
+                }
+            };
             
             document.querySelectorAll('.size-select').forEach(select => {
                 const type = select.closest('.item-row').dataset.type;
@@ -1194,7 +1273,8 @@
                     Object.keys(materials[conduitType][type]).forEach(size => {
                         const option = document.createElement('option');
                         option.value = size;
-                        option.textContent = size;
+                        option.textContent = isImperial && sizeLabels[conduitType][size] ? 
+                            `${size} (${sizeLabels[conduitType][size]})` : size;
                         select.appendChild(option);
                     });
                     
@@ -1815,6 +1895,7 @@
                 });
                 
                 updateUnitLabels();
+                updateConduitType();
                 updateCurrency();
                 
                 // Focus on project name field after reset
