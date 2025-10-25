@@ -12,10 +12,13 @@
             --primary: #2c3e50;
             --secondary: #3498db;
             --success: #27ae60;
-            --warning: #f39c12;
-            --danger: #e74c3c;
+            --warning: #e67e22;
+            --danger: #c0392b;
             --light: #ecf0f1;
-            --dark: #34495e;
+            --dark: #2c3e50;
+            --text-dark: #2c3e50;
+            --text-medium: #5d6d7e;
+            --text-light: #7f8c8d;
         }
 
         * {
@@ -27,7 +30,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: var(--text-dark);
             background-color: #f8f9fa;
         }
 
@@ -92,9 +95,11 @@
             font-size: 0.85rem;
         }
 
-        .btn:hover {
+        .btn:hover, .btn:focus {
             opacity: 0.9;
             transform: translateY(-1px);
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
         }
 
         .calculator-grid {
@@ -150,7 +155,7 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 500;
-            color: var(--dark);
+            color: var(--text-dark);
         }
 
         input, select {
@@ -187,6 +192,11 @@
             background: var(--secondary);
             color: white;
             border-color: var(--secondary);
+        }
+
+        .unit-btn:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
         }
 
         .work-item {
@@ -295,6 +305,11 @@
             font-weight: 600;
         }
 
+        .tab:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: -2px;
+        }
+
         .tab-content {
             display: none;
         }
@@ -305,7 +320,7 @@
 
         .unit-label {
             font-size: 0.8rem;
-            color: #666;
+            color: var(--text-medium);
             margin-top: 2px;
         }
 
@@ -379,13 +394,15 @@
             font-size: 0.85rem;
         }
 
-        .remove-btn:hover {
+        .remove-btn:hover, .remove-btn:focus {
             opacity: 0.9;
+            outline: 2px solid var(--danger);
+            outline-offset: 2px;
         }
 
         .input-error {
             border-color: var(--danger) !important;
-            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2) !important;
+            box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.2) !important;
         }
 
         .error-message {
@@ -407,6 +424,7 @@
             margin-bottom: 15px;
             padding-bottom: 8px;
             border-bottom: 2px solid rgba(255,255,255,0.3);
+            color: var(--text-dark);
         }
 
         .how-to-use {
@@ -458,293 +476,369 @@
 
         .formula-box p, .reference-box ul {
             margin-bottom: 8px;
+            color: var(--text-dark);
         }
 
         .reference-box ul {
             padding-left: 20px;
         }
+
+        /* Accessibility improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--secondary);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* Focus indicators */
+        *:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --primary: #000000;
+                --secondary: #0000ff;
+                --success: #008000;
+                --warning: #ffa500;
+                --danger: #ff0000;
+                --text-dark: #000000;
+                --text-medium: #000000;
+                --text-light: #000000;
+            }
+
+            .unit-label {
+                font-weight: bold;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <div class="container">
         <header>
             <div class="header-content">
                 <h1>Electrical Pipes and Fittings Calculator</h1>
                 <div class="controls">
-                    <button class="btn btn-success" id="exportPdfBtn">Export PDF</button>
-                    <button class="btn btn-success" id="exportExcelBtn">Export Excel</button>
-                    <button class="btn btn-danger" id="resetBtn">Reset</button>
+                    <button class="btn btn-success" id="exportPdfBtn" aria-label="Export results as PDF document">Export PDF</button>
+                    <button class="btn btn-success" id="exportExcelBtn" aria-label="Export results as Excel spreadsheet">Export Excel</button>
+                    <button class="btn btn-danger" id="resetBtn" aria-label="Reset all inputs and calculations">Reset</button>
                 </div>
             </div>
         </header>
 
-        <div class="calculator-grid">
-            <div class="input-section">
-                <h2 class="section-title">Project Inputs</h2>
+        <main id="main-content">
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <h2 class="section-title">Project Inputs</h2>
 
-                <div class="input-group">
-                    <label>Project Name</label>
-                    <input type="text" id="projectName" placeholder="Enter project name">
-                    <div class="error-message" id="projectNameError">Project name is required</div>
-                </div>
-
-                <div class="input-group">
-                    <label>Client Name</label>
-                    <input type="text" id="clientName" placeholder="Enter client name">
-                </div>
-
-                <div class="input-group">
-                    <label>Project Location</label>
-                    <input type="text" id="projectLocation" placeholder="e.g., Manila, Philippines">
-                </div>
-
-                <div class="input-group">
-                    <label>Prepared By</label>
-                    <input type="text" id="preparedBy" placeholder="Enter preparer name">
-                </div>
-
-                <div class="input-group">
-                    <label>Date</label>
-                    <input type="date" id="projectDate">
-                </div>
-
-                <div class="input-group">
-                    <label>Unit System</label>
-                    <div class="unit-toggle">
-                        <div class="unit-btn active" data-unit="metric">Metric (SI)</div>
-                        <div class="unit-btn" data-unit="imperial">Imperial (US)</div>
-                    </div>
-                </div>
-
-                <div class="tab-container">
-                    <div class="tabs" role="tablist" aria-label="Project input sections">
-                        <div class="tab active" role="tab" aria-selected="true" aria-controls="general-tab" data-tab="general" id="tab-general">General Parameters</div>
-                        <div class="tab" role="tab" aria-selected="false" aria-controls="pipes-tab" data-tab="pipes" id="tab-pipes">Pipes & Fittings</div>
-                        <div class="tab" role="tab" aria-selected="false" aria-controls="help-tab" data-tab="help" id="tab-help">Help & Reference</div>
+                    <div class="input-group">
+                        <label for="projectName">Project Name</label>
+                        <input type="text" id="projectName" placeholder="Enter project name" aria-required="true">
+                        <div class="error-message" id="projectNameError">Project name is required</div>
                     </div>
 
-                    <div class="tab-content active" id="general-tab" role="tabpanel" aria-labelledby="tab-general">
-                        <div class="input-row">
-                            <div class="input-group">
-                                <label class="tooltip">Labor Rate (per hour)<span class="tooltiptext">Hourly rate for electrician labor</span></label>
-                                <input type="number" id="laborRate" value="250" step="0.01" min="0">
-                                <div class="error-message" id="laborRateError">Labor rate must be positive</div>
-                                <div class="unit-label currency-unit">PHP/hour</div>
+                    <div class="input-group">
+                        <label for="clientName">Client Name</label>
+                        <input type="text" id="clientName" placeholder="Enter client name">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="projectLocation">Project Location</label>
+                        <input type="text" id="projectLocation" placeholder="e.g., Manila, Philippines">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="preparedBy">Prepared By</label>
+                        <input type="text" id="preparedBy" placeholder="Enter preparer name">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="projectDate">Date</label>
+                        <input type="date" id="projectDate">
+                    </div>
+
+                    <div class="input-group">
+                        <label id="unitSystemLabel">Unit System</label>
+                        <div class="unit-toggle" role="radiogroup" aria-labelledby="unitSystemLabel">
+                            <div class="unit-btn active" data-unit="metric" role="radio" aria-checked="true" tabindex="0">Metric (SI)</div>
+                            <div class="unit-btn" data-unit="imperial" role="radio" aria-checked="false" tabindex="0">Imperial (US)</div>
+                        </div>
+                    </div>
+
+                    <div class="tab-container">
+                        <div class="tabs" role="tablist" aria-label="Project input sections">
+                            <div class="tab active" role="tab" aria-selected="true" aria-controls="general-tab" data-tab="general" id="tab-general" tabindex="0">General Parameters</div>
+                            <div class="tab" role="tab" aria-selected="false" aria-controls="pipes-tab" data-tab="pipes" id="tab-pipes" tabindex="0">Pipes & Fittings</div>
+                            <div class="tab" role="tab" aria-selected="false" aria-controls="help-tab" data-tab="help" id="tab-help" tabindex="0">Help & Reference</div>
+                        </div>
+
+                        <div class="tab-content active" id="general-tab" role="tabpanel" aria-labelledby="tab-general">
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="laborRate" class="tooltip">Labor Rate (per hour)<span class="tooltiptext">Hourly rate for electrician labor</span></label>
+                                    <input type="number" id="laborRate" value="250" step="0.01" min="0" aria-describedby="laborRateDesc">
+                                    <div class="error-message" id="laborRateError">Labor rate must be positive</div>
+                                    <div class="unit-label currency-unit">PHP/hour</div>
+                                    <div id="laborRateDesc" class="sr-only">Hourly rate for electrician labor</div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="overheadRate" class="tooltip">Overhead Rate (%)<span class="tooltiptext">Percentage for general overhead costs</span></label>
+                                    <input type="number" id="overheadRate" value="15" step="0.1" min="0" max="100" aria-describedby="overheadRateDesc">
+                                    <div class="error-message" id="overheadRateError">Overhead rate must be between 0-100%</div>
+                                    <div id="overheadRateDesc" class="sr-only">Percentage for general overhead costs</div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="profitMarginRate" class="tooltip">Profit Margin (%)<span class="tooltiptext">Desired profit margin percentage</span></label>
+                                    <input type="number" id="profitMarginRate" value="20" step="0.1" min="0" max="100" aria-describedby="profitMarginDesc">
+                                    <div class="error-message" id="profitMarginError">Profit margin must be between 0-100%</div>
+                                    <div id="profitMarginDesc" class="sr-only">Desired profit margin percentage</div>
+                                </div>
                             </div>
-                            <div class="input-group">
-                                <label class="tooltip">Overhead Rate (%)<span class="tooltiptext">Percentage for general overhead costs</span></label>
-                                <input type="number" id="overheadRate" value="15" step="0.1" min="0" max="100">
-                                <div class="error-message" id="overheadRateError">Overhead rate must be between 0-100%</div>
-                            </div>
-                            <div class="input-group">
-                                <label class="tooltip">Profit Margin (%)<span class="tooltiptext">Desired profit margin percentage</span></label>
-                                <input type="number" id="profitMarginRate" value="20" step="0.1" min="0" max="100">
-                                <div class="error-message" id="profitMarginError">Profit margin must be between 0-100%</div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="currency">Currency</label>
+                                    <select id="currency" aria-describedby="currencyDesc">
+                                        <option value="PHP">Philippine Peso (PHP)</option>
+                                        <option value="USD">US Dollar ($)</option>
+                                        <option value="EUR">Euro (€)</option>
+                                        <option value="JPY">Japanese Yen (¥)</option>
+                                    </select>
+                                    <div id="currencyDesc" class="sr-only">Select the currency for cost calculations</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-row">
+
+                        <div class="tab-content" id="pipes-tab" role="tabpanel" aria-labelledby="tab-pipes">
                             <div class="input-group">
-                                <label>Currency</label>
-                                <select id="currency">
-                                    <option value="PHP">Philippine Peso (PHP)</option>
-                                    <option value="USD">US Dollar ($)</option>
-                                    <option value="EUR">Euro (€)</option>
-                                    <option value="JPY">Japanese Yen (¥)</option>
+                                <label for="conduitType">Conduit Type</label>
+                                <select id="conduitType" aria-describedby="conduitTypeDesc">
+                                    <option value="PVC">PVC</option>
+                                    <option value="EMT">EMT</option>
                                 </select>
+                                <div id="conduitTypeDesc" class="sr-only">Select the type of conduit for your project</div>
+                            </div>
+
+                            <div class="work-item">
+                                <div class="work-item-title">
+                                    <span>Pipes</span>
+                                    <button class="btn btn-primary btn-sm" id="addPipeBtn" aria-label="Add new pipe entry">Add Pipe</button>
+                                </div>
+                                <div id="pipesContainer" aria-live="polite">
+                                    <!-- Dynamic pipes will be added here -->
+                                </div>
+                            </div>
+
+                            <div class="work-item">
+                                <div class="work-item-title">
+                                    <span>Couplings</span>
+                                    <button class="btn btn-primary btn-sm" id="addCouplingBtn" aria-label="Add new coupling entry">Add Coupling</button>
+                                </div>
+                                <div id="couplingsContainer" aria-live="polite">
+                                    <!-- Dynamic couplings will be added here -->
+                                </div>
+                            </div>
+
+                            <div class="work-item">
+                                <div class="work-item-title">
+                                    <span>Elbows</span>
+                                    <button class="btn btn-primary btn-sm" id="addElbowBtn" aria-label="Add new elbow entry">Add Elbow</button>
+                                </div>
+                                <div id="elbowsContainer" aria-live="polite">
+                                    <!-- Dynamic elbows will be added here -->
+                                </div>
+                            </div>
+
+                            <div class="work-item">
+                                <div class="work-item-title">
+                                    <span>Connectors</span>
+                                    <button class="btn btn-primary btn-sm" id="addConnectorBtn" aria-label="Add new connector entry">Add Connector</button>
+                                </div>
+                                <div id="connectorsContainer" aria-live="polite">
+                                    <!-- Dynamic connectors will be added here -->
+                                </div>
+                            </div>
+
+                            <div class="work-item">
+                                <div class="work-item-title">
+                                    <span>Locknuts & Bushings</span>
+                                    <button class="btn btn-primary btn-sm" id="addLocknutBtn" aria-label="Add new locknut or bushing entry">Add Locknut/Bushing</button>
+                                </div>
+                                <div id="locknutsContainer" aria-live="polite">
+                                    <!-- Dynamic locknuts will be added here -->
+                                </div>
                             </div>
                         </div>
+
+                        <div class="tab-content" id="help-tab" role="tabpanel" aria-labelledby="tab-help">
+                            <div class="help-section how-to-use">
+                                <h3>How to Use This Calculator</h3>
+                                <div class="step-guide">
+                                    <p><span class="step-number">1</span> <strong>Project Information:</strong> Enter project details like name, client, location, and date.</p>
+                                    <p><span class="step-number">2</span> <strong>Unit System:</strong> Choose between Imperial (feet) or Metric (meters) units.</p>
+                                    <p><span class="step-number">3</span> <strong>General Parameters:</strong> Set labor rate, overhead, profit margin, and currency.</p>
+                                    <p><span class="step-number">4</span> <strong>Pipes & Fittings:</strong> Select conduit type and add items for each category with specific sizes.</p>
+                                    <p><span class="step-number">5</span> <strong>Calculate:</strong> Click "Calculate" to generate the cost breakdown and labor requirements.</p>
+                                    <p><span class="step-number">6</span> <strong>Export:</strong> Export results as PDF or Excel for professional use.</p>
+                                </div>
+                            </div>
+
+                            <div class="help-section calculation-formulas">
+                                <h3>Calculation Formulas</h3>
+                                <div class="formula-box">
+                                    <h4>Direct Costs:</h4>
+                                    <p><strong>Material Cost</strong> = Quantity × Unit Cost</p>
+                                    <p><strong>Labor Cost</strong> = Labor Hours × Labor Rate</p>
+                                    <p><strong>Total Direct Cost</strong> = Sum of Material and Labor Costs</p>
+                                    <h4>Indirect Costs:</h4>
+                                    <p><strong>Overhead Cost</strong> = Total Direct Cost × Overhead Rate</p>
+                                    <h4>Profit:</h4>
+                                    <p><strong>Profit</strong> = (Direct Cost + Overhead) × Profit Margin Rate</p>
+                                    <p><strong>Final Cost</strong> = Direct Cost + Overhead + Profit</p>
+                                </div>
+                            </div>
+
+                            <div class="help-section standard-sizes">
+                                <h3>Standard Sizes</h3>
+                                <div class="reference-box">
+                                    <h4>PVC Conduit Sizes:</h4>
+                                    <ul>
+                                        <li>Pipes: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm, 200mm</li>
+                                        <li>Couplings: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
+                                        <li>Elbows: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
+                                        <li>Locknuts & Bushings: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
+                                    </ul>
+                                    <h4>EMT Conduit Sizes:</h4>
+                                    <ul>
+                                        <li>Pipes: 15mm, 20mm, 25mm, 40mm, 50mm</li>
+                                        <li>Couplings: 15mm, 20mm, 25mm, 40mm, 50mm</li>
+                                        <li>Connectors: 15mm, 20mm, 25mm, 40mm, 50mm</li>
+                                        <li>Locknuts & Bushings: 15mm, 20mm, 25mm, 40mm, 50mm</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="validation-error" id="validationError">
+                            Please check your inputs. Some values are missing or invalid.
+                        </div>
+
+                        <button class="btn btn-primary" id="calculateBtn" style="width: 100%; padding: 12px; margin-top: 20px;" aria-describedby="calculateDesc">
+                            Calculate
+                        </button>
+                        <div id="calculateDesc" class="sr-only">Calculate the estimate based on your inputs</div>
+                    </div>
+                </div>
+
+                <div class="output-section">
+                    <h2 class="section-title">Estimate Results</h2>
+
+                    <div id="resultsPlaceholder">
+                        <p>Enter your project details and click "Calculate" to see results.</p>
                     </div>
 
-                    <div class="tab-content" id="pipes-tab" role="tabpanel" aria-labelledby="tab-pipes">
-                        <div class="input-group">
-                            <label>Conduit Type</label>
-                            <select id="conduitType">
-                                <option value="PVC">PVC</option>
-                                <option value="EMT">EMT</option>
-                            </select>
-                        </div>
+                    <div id="resultsContent" class="hidden" aria-live="polite">
+                        <h3>Project: <span id="resultProjectName"></span></h3>
+                        <p><strong>Client:</strong> <span id="resultClientName"></span></p>
+                        <p><strong>Location:</strong> <span id="resultProjectLocation"></span></p>
+                        <p><strong>Prepared By:</strong> <span id="resultPreparedBy"></span></p>
+                        <p><strong>Date:</strong> <span id="resultProjectDate"></span></p>
 
-                        <div class="work-item">
-                            <div class="work-item-title">
-                                <span>Pipes</span>
-                                <button class="btn btn-primary btn-sm" id="addPipeBtn">Add Pipe</button>
-                            </div>
-                            <div id="pipesContainer">
-                                <!-- Dynamic pipes will be added here -->
-                            </div>
-                        </div>
+                        <h4 style="margin-top: 20px;">Bill of Quantity</h4>
+                        <table class="bill-of-quantity-table" id="billOfQuantityTable" aria-describedby="billOfQuantityDesc">
+                            <caption class="sr-only" id="billOfQuantityDesc">Detailed breakdown of all items, quantities, and costs</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Item No.</th>
+                                    <th>Scope of Work</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Unit</th>
+                                    <th class="text-right">Material Cost</th>
+                                    <th class="text-right">Labor Hours</th>
+                                    <th class="text-right">Labor Cost</th>
+                                    <th class="text-right">Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="billOfQuantityTableBody"></tbody>
+                        </table>
 
-                        <div class="work-item">
-                            <div class="work-item-title">
-                                <span>Couplings</span>
-                                <button class="btn btn-primary btn-sm" id="addCouplingBtn">Add Coupling</button>
-                            </div>
-                            <div id="couplingsContainer">
-                                <!-- Dynamic couplings will be added here -->
-                            </div>
-                        </div>
+                        <h4 style="margin-top: 20px;">Indirect Costs & Markup</h4>
+                        <table class="bill-of-quantity-table" aria-describedby="indirectCostsDesc">
+                            <caption class="sr-only" id="indirectCostsDesc">Breakdown of overhead costs and profit margin</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Item No.</th>
+                                    <th>Scope of Work</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Unit</th>
+                                    <th class="text-right">Material Cost</th>
+                                    <th class="text-right">Labor Hours</th>
+                                    <th class="text-right">Labor Cost</th>
+                                    <th class="text-right">Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="indirectCostsTableBody"></tbody>
+                        </table>
 
-                        <div class="work-item">
-                            <div class="work-item-title">
-                                <span>Elbows</span>
-                                <button class="btn btn-primary btn-sm" id="addElbowBtn">Add Elbow</button>
-                            </div>
-                            <div id="elbowsContainer">
-                                <!-- Dynamic elbows will be added here -->
-                            </div>
-                        </div>
+                        <h4 style="margin-top: 20px;">Summary</h4>
+                        <table class="bill-of-quantity-table" aria-describedby="summaryDesc">
+                            <caption class="sr-only" id="summaryDesc">Total cost summary including direct costs, indirect costs, and final price</caption>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th class="text-right">Material Cost</th>
+                                    <th class="text-right">Labor Hours</th>
+                                    <th class="text-right">Labor Cost</th>
+                                    <th class="text-right">Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="summaryTableBody"></tbody>
+                        </table>
 
-                        <div class="work-item">
-                            <div class="work-item-title">
-                                <span>Connectors</span>
-                                <button class="btn btn-primary btn-sm" id="addConnectorBtn">Add Connector</button>
-                            </div>
-                            <div id="connectorsContainer">
-                                <!-- Dynamic connectors will be added here -->
-                            </div>
-                        </div>
-
-                        <div class="work-item">
-                            <div class="work-item-title">
-                                <span>Locknuts & Bushings</span>
-                                <button class="btn btn-primary btn-sm" id="addLocknutBtn">Add Locknut/Bushing</button>
-                            </div>
-                            <div id="locknutsContainer">
-                                <!-- Dynamic locknuts will be added here -->
-                            </div>
-                        </div>
+                        <div id="crewSizingSection" class="crew-sizing hidden" aria-live="polite"></div>
                     </div>
-
-                    <div class="tab-content" id="help-tab" role="tabpanel" aria-labelledby="tab-help">
-                        <div class="help-section how-to-use">
-                            <h3>How to Use This Calculator</h3>
-                            <div class="step-guide">
-                                <p><span class="step-number">1</span> <strong>Project Information:</strong> Enter project details like name, client, location, and date.</p>
-                                <p><span class="step-number">2</span> <strong>Unit System:</strong> Choose between Imperial (feet) or Metric (meters) units.</p>
-                                <p><span class="step-number">3</span> <strong>General Parameters:</strong> Set labor rate, overhead, profit margin, and currency.</p>
-                                <p><span class="step-number">4</span> <strong>Pipes & Fittings:</strong> Select conduit type and add items for each category with specific sizes.</p>
-                                <p><span class="step-number">5</span> <strong>Calculate:</strong> Click "Calculate" to generate the cost breakdown and labor requirements.</p>
-                                <p><span class="step-number">6</span> <strong>Export:</strong> Export results as PDF or Excel for professional use.</p>
-                            </div>
-                        </div>
-
-                        <div class="help-section calculation-formulas">
-                            <h3>Calculation Formulas</h3>
-                            <div class="formula-box">
-                                <h4>Direct Costs:</h4>
-                                <p><strong>Material Cost</strong> = Quantity × Unit Cost</p>
-                                <p><strong>Labor Cost</strong> = Labor Hours × Labor Rate</p>
-                                <p><strong>Total Direct Cost</strong> = Sum of Material and Labor Costs</p>
-                                <h4>Indirect Costs:</h4>
-                                <p><strong>Overhead Cost</strong> = Total Direct Cost × Overhead Rate</p>
-                                <h4>Profit:</h4>
-                                <p><strong>Profit</strong> = (Direct Cost + Overhead) × Profit Margin Rate</p>
-                                <p><strong>Final Cost</strong> = Direct Cost + Overhead + Profit</p>
-                            </div>
-                        </div>
-
-                        <div class="help-section standard-sizes">
-                            <h3>Standard Sizes</h3>
-                            <div class="reference-box">
-                                <h4>PVC Conduit Sizes:</h4>
-                                <ul>
-                                    <li>Pipes: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm, 200mm</li>
-                                    <li>Couplings: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
-                                    <li>Elbows: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
-                                    <li>Locknuts & Bushings: 20mm, 25mm, 40mm, 50mm, 75mm, 90mm, 100mm</li>
-                                </ul>
-                                <h4>EMT Conduit Sizes:</h4>
-                                <ul>
-                                    <li>Pipes: 15mm, 20mm, 25mm, 40mm, 50mm</li>
-                                    <li>Couplings: 15mm, 20mm, 25mm, 40mm, 50mm</li>
-                                    <li>Connectors: 15mm, 20mm, 25mm, 40mm, 50mm</li>
-                                    <li>Locknuts & Bushings: 15mm, 20mm, 25mm, 40mm, 50mm</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="validation-error" id="validationError">
-                        Please check your inputs. Some values are missing or invalid.
-                    </div>
-
-                    <button class="btn btn-primary" id="calculateBtn" style="width: 100%; padding: 12px; margin-top: 20px;">
-                        Calculate
-                    </button>
                 </div>
             </div>
-
-            <div class="output-section">
-                <h2 class="section-title">Estimate Results</h2>
-
-                <div id="resultsPlaceholder">
-                    <p>Enter your project details and click "Calculate" to see results.</p>
-                </div>
-
-                <div id="resultsContent" class="hidden">
-                    <h3>Project: <span id="resultProjectName"></span></h3>
-                    <p><strong>Client:</strong> <span id="resultClientName"></span></p>
-                    <p><strong>Location:</strong> <span id="resultProjectLocation"></span></p>
-                    <p><strong>Prepared By:</strong> <span id="resultPreparedBy"></span></p>
-                    <p><strong>Date:</strong> <span id="resultProjectDate"></span></p>
-
-                    <h4 style="margin-top: 20px;">Bill of Quantity</h4>
-                    <table class="bill-of-quantity-table" id="billOfQuantityTable">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Item No.</th>
-                                <th>Scope of Work</th>
-                                <th class="text-center">Quantity</th>
-                                <th class="text-center">Unit</th>
-                                <th class="text-right">Material Cost</th>
-                                <th class="text-right">Labor Hours</th>
-                                <th class="text-right">Labor Cost</th>
-                                <th class="text-right">Total Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody id="billOfQuantityTableBody"></tbody>
-                    </table>
-
-                    <h4 style="margin-top: 20px;">Indirect Costs & Markup</h4>
-                    <table class="bill-of-quantity-table">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Item No.</th>
-                                <th>Scope of Work</th>
-                                <th class="text-center">Quantity</th>
-                                <th class="text-center">Unit</th>
-                                <th class="text-right">Material Cost</th>
-                                <th class="text-right">Labor Hours</th>
-                                <th class="text-right">Labor Cost</th>
-                                <th class="text-right">Total Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody id="indirectCostsTableBody"></tbody>
-                    </table>
-
-                    <h4 style="margin-top: 20px;">Summary</h4>
-                    <table class="bill-of-quantity-table">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th class="text-right">Material Cost</th>
-                                <th class="text-right">Labor Hours</th>
-                                <th class="text-right">Labor Cost</th>
-                                <th class="text-right">Total Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody id="summaryTableBody"></tbody>
-                    </table>
-
-                    <div id="crewSizingSection" class="crew-sizing hidden"></div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script>
         // Global variables
-        let currentUnitSystem = 'metric'; // Changed to metric as default
+        let currentUnitSystem = 'metric';
         let projectData = {};
         const FEET_PER_METER = 3.28084;
         const PHP_TO_USD = 0.018;
@@ -881,11 +975,23 @@
                     if (newUnit !== currentUnitSystem) {
                         convertUnits(newUnit);
                     }
-                    unitButtons.forEach(btn => btn.classList.remove('active'));
+                    unitButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-checked', 'false');
+                    });
                     this.classList.add('active');
+                    this.setAttribute('aria-checked', 'true');
                     currentUnitSystem = newUnit;
                     updateUnitLabels();
-                    updateConduitCosts(); // Update costs when unit changes
+                    updateConduitCosts();
+                });
+                
+                // Add keyboard support for unit buttons
+                button.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
                 });
             });
 
@@ -901,6 +1007,14 @@
                     this.classList.add('active');
                     this.setAttribute('aria-selected', 'true');
                     document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+                
+                // Add keyboard navigation for tabs
+                tab.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
                 });
             });
 
@@ -1221,28 +1335,28 @@
             const itemHTML = `
                 <div class="input-row-dynamic item-row" data-type="${type}" id="${itemId}">
                     <div class="input-group">
-                        <label>Size</label>
-                        <select class="size-select">
+                        <label for="${itemId}-size">Size</label>
+                        <select class="size-select" id="${itemId}-size">
                             ${sizeOptions}
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>${lengthLabel}</label>
-                        <input type="number" class="${isPipe ? 'pipe-length' : 'item-quantity'}" value="0" min="0" step="0.1">
+                        <label for="${itemId}-quantity">${lengthLabel}</label>
+                        <input type="number" class="${isPipe ? 'pipe-length' : 'item-quantity'}" id="${itemId}-quantity" value="0" min="0" step="0.1">
                         <div class="unit-label">${lengthUnit}</div>
                     </div>
                     <div class="input-group">
-                        <label>Unit Cost</label>
-                        <input type="number" class="cost-input" value="0" step="0.01" min="0">
+                        <label for="${itemId}-cost">Unit Cost</label>
+                        <input type="number" class="cost-input" id="${itemId}-cost" value="0" step="0.01" min="0">
                         <div class="unit-label">${costUnit}</div>
                     </div>
                     <div class="input-group">
-                        <label>Labor Hours per Unit</label>
-                        <input type="number" class="labor-hours-input" value="0" step="0.01" min="0">
+                        <label for="${itemId}-labor">Labor Hours per Unit</label>
+                        <input type="number" class="labor-hours-input" id="${itemId}-labor" value="0" step="0.01" min="0">
                         <div class="unit-label">hours</div>
                     </div>
                     <div class="input-group">
-                        <button class="remove-btn" type="button" onclick="removeItem('${itemId}')">Remove</button>
+                        <button class="remove-btn" type="button" onclick="removeItem('${itemId}')" aria-label="Remove this item">Remove</button>
                     </div>
                 </div>
             `;
@@ -1285,6 +1399,12 @@
                 });
             });
             
+            // Focus on the new item for better keyboard navigation
+            setTimeout(() => {
+                const firstInput = newItem.querySelector('input, select');
+                if (firstInput) firstInput.focus();
+            }, 100);
+            
             console.log(`Item ${itemId} added successfully`);
         }
 
@@ -1292,6 +1412,16 @@
             const element = document.getElementById(id);
             if (element) {
                 element.remove();
+                // Announce removal to screen readers
+                const liveRegion = document.createElement('div');
+                liveRegion.setAttribute('aria-live', 'polite');
+                liveRegion.setAttribute('aria-atomic', 'true');
+                liveRegion.className = 'sr-only';
+                liveRegion.textContent = 'Item removed';
+                document.body.appendChild(liveRegion);
+                setTimeout(() => {
+                    document.body.removeChild(liveRegion);
+                }, 1000);
             }
         }
 
@@ -1564,6 +1694,10 @@
             resultsPlaceholder.classList.add('hidden');
             resultsContent.classList.remove('hidden');
             
+            // Focus on results for screen reader users
+            resultsContent.setAttribute('tabindex', '-1');
+            resultsContent.focus();
+            
             console.log('Results displayed successfully');
         }
 
@@ -1626,7 +1760,7 @@
                         <div>${formatNumber(largeCrewWeeks, 1)} weeks</div>
                     </div>
                 </div>
-                <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-medium);">
                     <strong>Note:</strong> Based on ${HOURS_PER_DAY} hours per day, ${DAYS_PER_WEEK} days per week.
                     Adjust based on project constraints and safety requirements.
                 </div>
@@ -1647,8 +1781,12 @@
                 document.getElementById('profitMarginRate').value = '20';
                 document.getElementById('currency').value = 'PHP';
                 
-                unitButtons.forEach(btn => btn.classList.remove('active'));
+                unitButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-checked', 'false');
+                });
                 document.querySelector('.unit-btn[data-unit="metric"]').classList.add('active');
+                document.querySelector('.unit-btn[data-unit="metric"]').setAttribute('aria-checked', 'true');
                 currentUnitSystem = 'metric';
                 
                 document.getElementById('conduitType').value = 'PVC';
@@ -1678,6 +1816,9 @@
                 
                 updateUnitLabels();
                 updateCurrency();
+                
+                // Focus on project name field after reset
+                document.getElementById('projectName').focus();
             }
         }
 
